@@ -68,7 +68,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * @Date: 2024/2/22
      */
     @Override
-    public void save(EmployeeDTO employeeDTO) {
+    public void addNewEmployee(EmployeeDTO employeeDTO) {
         Employee employee = new Employee();
 
         //对象属性拷贝
@@ -89,7 +89,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setCreateUser(10L);
         employee.setUpdateUser(10L);
 
-        employeeMapper.insert(employee);
+        employeeMapper.addNewEmployee(employee);
     }
 
 }

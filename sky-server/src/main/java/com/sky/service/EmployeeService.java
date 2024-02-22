@@ -20,5 +20,5 @@ public interface EmployeeService {
      * @Author: MichaelLong
      * @Date: 2024/2/22
      */
-    void save(EmployeeDTO employeeDTO);
+    void addNewEmployee(EmployeeDTO employeeDTO);
 }
