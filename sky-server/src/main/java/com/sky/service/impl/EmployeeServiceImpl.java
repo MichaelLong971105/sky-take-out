@@ -70,8 +70,6 @@ public class EmployeeServiceImpl implements EmployeeService {
      * @Description: 新增员工
      * @Param: [employeeDTO]
      * @return: void
-     * @Author: MichaelLong
-     * @Date: 2024/2/22
      */
     @Override
     public void addNewEmployee(EmployeeDTO employeeDTO) {
@@ -101,8 +99,6 @@ public class EmployeeServiceImpl implements EmployeeService {
      * @Description: 员工分页查询功能
      * @Param: [employeePageQueryDTO]
      * @return: com.sky.result.PageResult
-     * @Author: MichaelLong
-     * @Date: 2024/2/23
      */
     @Override
     public PageResult pageEmployee(EmployeePageQueryDTO employeePageQueryDTO) {
@@ -115,6 +111,30 @@ public class EmployeeServiceImpl implements EmployeeService {
         List<Employee> result = page.getResult();
         PageResult pageResult = new PageResult(total, result);
         return pageResult;
+    }
+
+    /**
+     * @Description: 启用禁用员工账号功能
+     * @Param: [status, id]
+     * @return: void
+     */
+    @Override
+    public void updateStatus(Integer status, Long id) {
+
+        //传统写法
+        /*
+        Employee employee = new Employee();
+        employee.setStatus(status);
+        employee.setId(id);
+         */
+
+        //builder写法
+        Employee employee = Employee.builder()
+                .status(status)
+                .id(id)
+                .build();
+
+        employeeMapper.updateEmployee(employee);
     }
 
 }

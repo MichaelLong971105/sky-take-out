@@ -3,7 +3,6 @@ package com.sky.mapper;
 import com.github.pagehelper.Page;
 import com.sky.dto.EmployeePageQueryDTO;
 import com.sky.entity.Employee;
-import com.sky.result.PageResult;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -23,8 +22,6 @@ public interface EmployeeMapper {
      * @Description: 插入新增员工信息
      * @Param: [employee]
      * @return: void
-     * @Author: MichaelLong
-     * @Date: 2024/2/22
      */
     @Insert("insert into employee(name, username, password, phone, sex, id_number, status, create_time, update_time, create_user, update_user) " +
             "values " +
@@ -35,8 +32,13 @@ public interface EmployeeMapper {
      * @Description: 员工分页查询功能
      * @Param: [employeePageQueryDTO]
      * @return: com.github.pagehelper.Page<com.sky.entity.Employee>
-     * @Author: MichaelLong
-     * @Date: 2024/2/23
      */
     Page<Employee> pageEmployee(EmployeePageQueryDTO employeePageQueryDTO);
+
+    /** 
+     * @Description: 根据主键动态修改员工信息
+     * @Param: [employee]
+     * @return: void
+     */
+    void updateEmployee(Employee employee);
 }

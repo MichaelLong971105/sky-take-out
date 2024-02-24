@@ -19,8 +19,6 @@ public interface EmployeeService {
      * @Description: 新增员工
      * @Param: [employeeDTO]
      * @return: void
-     * @Author: MichaelLong
-     * @Date: 2024/2/22
      */
     void addNewEmployee(EmployeeDTO employeeDTO);
 
@@ -28,8 +26,13 @@ public interface EmployeeService {
      * @Description: 分页查询功能
      * @Param: [employeePageQueryDTO]
      * @return: com.sky.result.PageResult
-     * @Author: MichaelLong
-     * @Date: 2024/2/23
      */
     PageResult pageEmployee(EmployeePageQueryDTO employeePageQueryDTO);
+
+    /**
+     * @Description: 启用禁用员工账号功能
+     * @Param: [status, id]
+     * @return: void
+     */
+    void updateStatus(Integer status, Long id);
 }
