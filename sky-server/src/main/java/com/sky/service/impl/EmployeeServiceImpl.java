@@ -137,4 +137,32 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeMapper.updateEmployee(employee);
     }
 
+    /**
+     * @Description: 根据id查询员工信息
+     * @Param: [id]
+     * @return: com.sky.entity.Employee
+     */
+    @Override
+    public Employee getEmployeeById(Long id) {
+        Employee employee = employeeMapper.getEmployeeById(id);
+        employee.setPassword("*****"); //防止密码泄露
+        return employee;
+    }
+
+    /**
+     * @Description: 修改员工信息
+     * @Param: [employeeDTO]
+     * @return: void
+     */
+    @Override
+    public void editEmployee(EmployeeDTO employeeDTO) {
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(employeeDTO, employee);
+
+        employee.setUpdateTime(LocalDateTime.now()); //设置修改时间
+        employee.setUpdateUser(BaseContext.getCurrentId()); //设置修改人id
+
+        employeeMapper.updateEmployee(employee);
+    }
+
 }
