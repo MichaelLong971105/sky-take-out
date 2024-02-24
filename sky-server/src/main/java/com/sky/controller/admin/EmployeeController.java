@@ -81,12 +81,10 @@ public class EmployeeController {
      * @Description: 新增员工功能
      * @Param: [employeeDTO] 跟前端交互的对象
      * @return: 约定的返回类型Result
-     * @Author: MichaelLong
-     * @Date: 2024/2/22
      */
     @PostMapping
     @ApiOperation("新增员工功能")
-    public Result<T> addNewEmployee(@RequestBody EmployeeDTO employeeDTO){
+    public Result<T> addNewEmployee(@RequestBody EmployeeDTO employeeDTO) {
         log.info("新增员工{}", employeeDTO);
         employeeService.addNewEmployee(employeeDTO);
         return Result.success();
@@ -96,15 +94,26 @@ public class EmployeeController {
      * @Description: 员工分页查询功能
      * @Param: [employeePageQueryDTO]
      * @return: com.sky.result.Result<com.sky.result.PageResult>
-     * @Author: MichaelLong
-     * @Date: 2024/2/23
      */
     @GetMapping("/page")
     @ApiOperation("员工分页查询")
-    public Result<PageResult> pageEmployee(EmployeePageQueryDTO employeePageQueryDTO){
+    public Result<PageResult> pageEmployee(EmployeePageQueryDTO employeePageQueryDTO) {
         log.info("员工分页查询{}", employeePageQueryDTO);
         PageResult pageResult = employeeService.pageEmployee(employeePageQueryDTO);
         return Result.success(pageResult);
+    }
+
+    /**
+     * @Description: 启用禁用员工账号功能
+     * @Param: [status, id]
+     * @return: com.sky.result.Result
+     */
+    @PostMapping("/status/{status}")
+    @ApiOperation("启用禁用员工账号功能")
+    public Result updateStatus(@PathVariable Integer status, Long id) {
+        log.info("启用禁用员工账号:{}, {}", status, id);
+        employeeService.updateStatus(status, id);
+        return Result.success();
     }
 
 }

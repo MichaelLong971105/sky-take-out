@@ -31,8 +31,6 @@ public class GlobalExceptionHandler {
      * @Description: 处理SQL合法性异常
      * @Param: [ex]
      * @return: com.sky.result.Result
-     * @Author: MichaelLong
-     * @Date: 2024/2/22
      */
     @ExceptionHandler
     public Result exceptionHandler(SQLIntegrityConstraintViolationException ex){
