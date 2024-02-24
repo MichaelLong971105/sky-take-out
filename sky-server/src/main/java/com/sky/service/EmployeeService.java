@@ -35,4 +35,18 @@ public interface EmployeeService {
      * @return: void
      */
     void updateStatus(Integer status, Long id);
+
+    /**
+     * @Description: 根据id查询员工信息
+     * @Param: [id]
+     * @return: com.sky.entity.Employee
+     */
+    Employee getEmployeeById(Long id);
+
+    /**
+     * @Description: 修改员工信息
+     * @Param: [employeeDTO]
+     * @return: void
+     */
+    void editEmployee(EmployeeDTO employeeDTO);
 }
