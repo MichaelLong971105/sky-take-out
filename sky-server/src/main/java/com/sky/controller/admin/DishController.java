@@ -1,6 +1,8 @@
 package com.sky.controller.admin;
 
 import com.sky.dto.DishDTO;
+import com.sky.dto.DishPageQueryDTO;
+import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.DishService;
 import io.swagger.annotations.Api;
@@ -36,6 +38,19 @@ public class DishController {
         log.info("新增菜品:{}", dishDTO);
         dishService.addDishWithFlavor(dishDTO);
         return Result.success();
+    }
+
+    /**
+     * @Description: 菜品分页查询
+     * @Param: [dishPageQueryDTO]
+     * @return: com.sky.result.Result<com.sky.result.PageResult>
+     */
+    @GetMapping("/page")
+    @ApiOperation("菜品分页查询功能")
+    public Result<PageResult> pageDish(DishPageQueryDTO dishPageQueryDTO) {
+        log.info("分页查询菜品:{}", dishPageQueryDTO);
+        PageResult pageResult = dishService.pageDish(dishPageQueryDTO);
+        return Result.success(pageResult);
     }
 
 }

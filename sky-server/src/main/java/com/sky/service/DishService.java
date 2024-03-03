@@ -1,6 +1,8 @@
 package com.sky.service;
 
 import com.sky.dto.DishDTO;
+import com.sky.dto.DishPageQueryDTO;
+import com.sky.result.PageResult;
 import org.springframework.stereotype.Component;
 
 /**
@@ -18,4 +20,10 @@ public interface DishService {
      */
     public void addDishWithFlavor(DishDTO dishDTO);
 
+    /**
+     * @Description: 分页查询菜品信息
+     * @Param: [dishPageQueryDTO]
+     * @return: com.sky.result.PageResult
+     */
+    PageResult pageDish(DishPageQueryDTO dishPageQueryDTO);
 }
