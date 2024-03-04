@@ -1,7 +1,11 @@
 package com.sky.service;
 
 import com.sky.dto.DishDTO;
+import com.sky.dto.DishPageQueryDTO;
+import com.sky.result.PageResult;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * @program: sky-take-out-backend
@@ -18,4 +22,17 @@ public interface DishService {
      */
     public void addDishWithFlavor(DishDTO dishDTO);
 
+    /**
+     * @Description: 分页查询菜品信息
+     * @Param: [dishPageQueryDTO]
+     * @return: com.sky.result.PageResult
+     */
+    PageResult pageDish(DishPageQueryDTO dishPageQueryDTO);
+
+    /**
+     * @Description: 菜品批量删除
+     * @Param: [ids]
+     * @return: void
+     */
+    void deleteDishes(List<Long> ids);
 }
