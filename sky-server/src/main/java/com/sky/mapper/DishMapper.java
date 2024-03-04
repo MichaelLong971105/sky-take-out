@@ -4,11 +4,12 @@ import com.github.pagehelper.Page;
 import com.sky.annotation.AutoFill;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
-import com.sky.entity.Employee;
 import com.sky.enumeration.OperationType;
 import com.sky.vo.DishVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 @Mapper
 public interface DishMapper {
@@ -35,4 +36,20 @@ public interface DishMapper {
      * @return: com.github.pagehelper.Page<com.sky.entity.Dish>
      */
     Page<DishVO> pageDish(DishPageQueryDTO dishPageQueryDTO);
+
+    /**
+     * @Description: 根据id查询菜品信息
+     * @Param: [id]
+     * @return: com.sky.entity.Dish
+     */
+    @Select("select * from dish where id = #{id}")
+    Dish getDishById(Long id);
+
+    /**
+     * @Description: 根据id批量删除菜品信息
+     * @Param: [ids]
+     * @return: void
+     */
+    void deleteDishByIds(List<Long> ids);
+
 }

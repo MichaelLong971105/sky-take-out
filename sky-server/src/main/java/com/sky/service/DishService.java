@@ -5,6 +5,8 @@ import com.sky.dto.DishPageQueryDTO;
 import com.sky.result.PageResult;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
  * @program: sky-take-out-backend
  * @description: 菜品相关Service接口
@@ -26,4 +28,11 @@ public interface DishService {
      * @return: com.sky.result.PageResult
      */
     PageResult pageDish(DishPageQueryDTO dishPageQueryDTO);
+
+    /**
+     * @Description: 菜品批量删除
+     * @Param: [ids]
+     * @return: void
+     */
+    void deleteDishes(List<Long> ids);
 }

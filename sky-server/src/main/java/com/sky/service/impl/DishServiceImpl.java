@@ -2,13 +2,16 @@ package com.sky.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.sky.constant.MessageConstant;
+import com.sky.constant.StatusConstant;
 import com.sky.dto.DishPageQueryDTO;
-import com.sky.entity.Employee;
+import com.sky.exception.DeletionNotAllowedException;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.dto.DishDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
 import com.sky.mapper.DishMapper;
+import com.sky.mapper.SetMealDishMapper;
 import com.sky.result.PageResult;
 import com.sky.service.DishService;
 import com.sky.vo.DishVO;
@@ -31,10 +34,13 @@ import java.util.List;
 public class DishServiceImpl implements DishService {
 
     @Autowired
-    DishMapper dishMapper;
+    private DishMapper dishMapper;
 
     @Autowired
-    DishFlavorMapper dishFlavorMapper;
+    private DishFlavorMapper dishFlavorMapper;
+
+    @Autowired
+    private SetMealDishMapper setMealDishMapper;
 
     /**
      * @Description: 新增菜品和对应的口味数据
@@ -78,5 +84,37 @@ public class DishServiceImpl implements DishService {
 
         Page<DishVO> page = dishMapper.pageDish(dishPageQueryDTO);
         return new PageResult(page.getTotal(), page.getResult());
+    }
+
+    /**
+     * @Description: 菜品批量删除
+     * @Param: [ids]
+     * @return: void
+     */
+    @Override
+    @Transactional
+    public void deleteDishes(List<Long> ids) {
+        //判断当前菜品是否能删除 -> 如果菜品状态是起售中则不能删除
+        for (Long id : ids) {
+            Dish dish = dishMapper.getDishById(id);
+            if (dish.getStatus() == StatusConstant.ENABLE) {
+                //当前菜品起售中，不能删除
+                throw new DeletionNotAllowedException(MessageConstant.DISH_ON_SALE);
+            }
+        }
+
+        //判断当前菜品是否能删除 -> 如果菜品在某个套餐中关联了则不能删除
+        List<Long> setSetMealIds = setMealDishMapper.getSetMealIdsByDishIds(ids);
+        if (setSetMealIds != null && setSetMealIds.size() > 0) {
+            //当前菜品被套餐关联了
+            throw new DeletionNotAllowedException(MessageConstant.DISH_BE_RELATED_BY_SETMEAL);
+        }
+
+        //批量删除菜品表中的菜品数据
+        dishMapper.deleteDishByIds(ids);
+
+        //批量删除口味表中该菜品关联的数据
+        dishFlavorMapper.deleteFlavorByIds(ids);
+
     }
 }
