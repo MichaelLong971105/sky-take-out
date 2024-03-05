@@ -4,12 +4,14 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.StatusConstant;
-import com.sky.dto.DishPageQueryDTO;
-import com.sky.exception.DeletionNotAllowedException;
-import com.sky.mapper.DishFlavorMapper;
+import com.sky.context.BaseContext;
 import com.sky.dto.DishDTO;
+import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
+import com.sky.exception.DeletionNotAllowedException;
+import com.sky.mapper.CategoryMapper;
+import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetMealDishMapper;
 import com.sky.result.PageResult;
@@ -21,6 +23,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -41,6 +45,9 @@ public class DishServiceImpl implements DishService {
 
     @Autowired
     private SetMealDishMapper setMealDishMapper;
+
+    @Autowired
+    private CategoryMapper categoryMapper;
 
     /**
      * @Description: 新增菜品和对应的口味数据
@@ -116,5 +123,75 @@ public class DishServiceImpl implements DishService {
         //批量删除口味表中该菜品关联的数据
         dishFlavorMapper.deleteFlavorByIds(ids);
 
+    }
+
+    /**
+     * @Description: 根据id查询菜品信息
+     * @Param: [id]
+     * @return: com.sky.vo.DishVO
+     */
+    @Override
+    public DishVO getDishById(Long id) {
+
+        //获取菜品基本信息
+        Dish dish = dishMapper.getDishById(id);
+
+        //获取菜品口味信息
+        List<DishFlavor> dishFlavors = dishFlavorMapper.getFlavorsByDishId(id);
+
+        //根据菜品的分类的id获取相应的分类名称
+        //可以不写，因为前面分页查询的时候已经有查询到了分类名称，前端会自动复用
+//        String categoryName = categoryMapper.getCategoryByDishId(dish.getCategoryId());
+
+        //把上述信息封装到DishVO对象中
+        DishVO dishVO = new DishVO();
+        BeanUtils.copyProperties(dish, dishVO);
+//        dishVO.setCategoryName(categoryName);
+        dishVO.setFlavors(dishFlavors);
+
+        //返回封装好的DishVO对象
+        return dishVO;
+    }
+
+    /**
+     * @Description: 修改菜品信息
+     * @Param: [dishDTO]
+     * @return: void
+     */
+    @Override
+    public void updateDish(DishDTO dishDTO) {
+        Dish dish = new Dish();
+
+        //把前端传递的DishDTO对象的信息复制到Dish对象中
+        BeanUtils.copyProperties(dishDTO, dish);
+
+        //更新修改日期
+        dish.setUpdateTime(LocalDateTime.now());
+        //更新修改人id
+        dish.setUpdateUser(BaseContext.getCurrentId());
+        //更新菜品信息
+        dishMapper.updateDish(dish);
+        //先从数据库中删除菜品的所有口味信息
+        dishFlavorMapper.deleteFlavorByIds(Collections.singletonList(dish.getId()));
+
+        List<DishFlavor> flavors = dishDTO.getFlavors();
+        if (flavors != null && flavors.size() > 0) {
+            //把菜品id和口味关联起来
+            flavors.forEach(dishFlavor -> {
+                dishFlavor.setDishId(dishDTO.getId());
+            });
+            //再把菜品的所有口味重新插入数据库
+            dishFlavorMapper.insertBatch(flavors);
+        }
+    }
+
+    /**
+     * @Description: 修改菜品状态(起售, 停售)
+     * @Param: [id]
+     * @return: void
+     */
+    @Override
+    public void updateDishStatus(Integer status, Long id) {
+        dishMapper.updateDishStatus(status, id);
     }
 }
