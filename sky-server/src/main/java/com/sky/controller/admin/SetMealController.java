@@ -1,16 +1,15 @@
 package com.sky.controller.admin;
 
 import com.sky.dto.SetMealDTO;
+import com.sky.dto.SetMealPageQueryDTO;
+import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.SetMealService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @program: sky-take-out-backend
@@ -39,6 +38,18 @@ public class SetMealController {
         log.info("新增套餐{}", setMealDTO);
         setMealService.addSetMeal(setMealDTO);
         return Result.success();
+    }
+
+    /**
+     * @Description: 实现套餐分页查询功能
+     * @Param: [setMealPageQueryDTO]
+     * @return: com.sky.result.Result<com.sky.result.PageResult>
+     */
+    @GetMapping("/page")
+    @ApiOperation("套餐分页查询功能")
+    public Result<PageResult> pageSetMeal(SetMealPageQueryDTO setMealPageQueryDTO) {
+        PageResult setMealPageResult = setMealService.pageSetMeal(setMealPageQueryDTO);
+        return Result.success(setMealPageResult);
     }
 
 }
