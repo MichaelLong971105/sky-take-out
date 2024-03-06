@@ -48,4 +48,11 @@ public interface SetMealService {
      * @return: void
      */
     void updateSetMeal(SetMealDTO setMealDTO);
+
+    /**
+     * @Description: 修改套餐起售、停售状态功能
+     * @Param: [setMealId, status]
+     * @return: void
+     */
+    void updateSetMealStatus(Long setMealId, Integer status);
 }

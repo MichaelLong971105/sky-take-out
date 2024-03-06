@@ -161,4 +161,14 @@ public class SetMealServiceImpl implements SetMealService {
         //把新的套餐关联菜品信息插入数据库
         setMealDishMapper.addSetMealDish(setMealDishes);
     }
+
+    /**
+     * @Description: 修改套餐起售、停售状态功能
+     * @Param: [setMealId, status]
+     * @return: void
+     */
+    @Override
+    public void updateSetMealStatus(Long setMealId, Integer status) {
+        setMealMapper.updateSetMealStatus(setMealId, status);
+    }
 }

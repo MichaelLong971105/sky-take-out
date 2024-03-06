@@ -8,6 +8,7 @@ import com.sky.enumeration.OperationType;
 import com.sky.vo.SetMealVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -57,4 +58,12 @@ public interface SetMealMapper {
      * @return: void
      */
     void updateSetMeal(SetMeal setMeal);
+
+    /** 
+     * @Description: 修改套餐起售、停售状态功能
+     * @Param: [setMealId, status]
+     * @return: void
+     */
+    @Update("update setmeal set status = #{status} where id = #{setMealId}")
+    void updateSetMealStatus(Long setMealId, Integer status);
 }

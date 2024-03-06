@@ -95,4 +95,17 @@ public class SetMealController {
         return Result.success();
     }
 
+    /**
+     * @Description: 修改套餐起售、停售状态功能
+     * @Param: [status]
+     * @return: com.sky.result.Result
+     */
+    @PostMapping("/status/{status}")
+    @ApiOperation("修改套餐起售、停售状态")
+    public Result updateSetMealStatus(@PathVariable Integer status, Long id) {
+        log.info("修改套餐启、停售:{}", status);
+        setMealService.updateSetMealStatus(id, status);
+        return Result.success();
+    }
+
 }
