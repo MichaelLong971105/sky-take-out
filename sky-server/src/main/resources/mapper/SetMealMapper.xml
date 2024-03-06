@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.mapper.SetMealMapper">
+    <insert id="addSetMeal" useGeneratedKeys="true" keyProperty="id">
+        insert into setmeal (category_id, name, price, description, image, create_time, update_time, create_user,
+                             update_user)
+        VALUES (#{categoryId}, #{name}, #{price}, #{description}, #{image}, #{createTime}, #{updateTime}, #{createUser},
+                #{updateUser})
+    </insert>
+
+    <select id="pageSetMeal" resultType="com.sky.vo.SetMealVO">
+        select s.*, c.name as categoryName from setmeal s left outer join category c on s.category_id = c.id
+        <where>
+            <if test="name != null and name != ''">
+                and s.name like concat('%', #{name} ,'%')
+            </if>
+            <if test="categoryId != null and categoryId != ''">
+                and category_id = #{categoryId}
+            </if>
+            <if test="status != null and status != ''">
+                and s.status = #{status}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="getSetMealById" resultType="com.sky.entity.SetMeal">
+        select *
+        from setmeal s
+        where id = #{id}
+    </select>
+
+    <delete id="deleteSetMeals">
+        delete from setmeal
+        where id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="updateSetMeal">
+        update setmeal
+        <set>
+            <if test="description != null">
+                description = #{description},
+            </if>
+            <if test="status != null and status != ''">
+                status = #{status},
+            </if>
+            category_id = #{categoryId},
+            name = #{name},
+            price = #{price},
+            image = #{image},
+            update_time = #{updateTime},
+            update_user = #{updateUser}
+        </set>
+        where id = #{id}
+    </update>
+
+</mapper>

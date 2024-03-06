@@ -67,4 +67,11 @@ public interface DishMapper {
      */
     @Update("update dish set status = #{status} where id = #{id}")
     void updateDishStatus(Integer status, Long id);
+
+    /**
+     * @Description: 根据菜品分类id获取关联的菜品信息
+     * @Param: [categoryId]
+     * @return: java.util.List<com.sky.entity.Dish>
+     */
+    List<Dish> getDishByCategoryId(Long categoryId);
 }

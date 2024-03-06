@@ -10,4 +10,23 @@
             #{dishId}
         </foreach>
     </select>
+
+    <insert id="addSetMealDish">
+        insert into setmeal_dish (setmeal_id, dish_id, name, price, copies) VALUES
+        <foreach collection="setMealDishes" item="setMealDish" separator=",">
+             (#{setMealDish.setMealId}, #{setMealDish.dishId}, #{setMealDish.name}, #{setMealDish.price}, #{setMealDish.copies})
+        </foreach>
+    </insert>
+
+    <delete id="deleteSetMealDishes">
+        delete from setmeal_dish
+        where setmeal_id in
+        <foreach collection="setMealIds" item="setMealId" open="(" separator="," close=")">
+            #{setMealId}
+        </foreach>
+    </delete>
+
+    <select id="getSetMealDishBySetMealId" resultType="com.sky.entity.SetMealDish">
+        select * from setmeal_dish where setmeal_id = #{id}
+    </select>
 </mapper>

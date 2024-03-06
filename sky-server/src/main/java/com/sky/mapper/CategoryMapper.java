@@ -60,4 +60,7 @@ public interface CategoryMapper {
      */
     @Select("select name as categoryName from category where id = #{CategoryId}")
     String getCategoryByDishId(Long CategoryId);
+
+    @Select("select name from category where id = #{categoryId}")
+    String getCategoryNameById(Long categoryId);
 }
