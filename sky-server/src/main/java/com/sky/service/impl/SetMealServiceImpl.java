@@ -3,6 +3,7 @@ package com.sky.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
+import com.sky.context.BaseContext;
 import com.sky.dto.SetMealDTO;
 import com.sky.dto.SetMealPageQueryDTO;
 import com.sky.entity.SetMeal;
@@ -18,7 +19,11 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @program: sky-take-out-backend
@@ -81,6 +86,11 @@ public class SetMealServiceImpl implements SetMealService {
 
     }
 
+    /**
+     * @Description: 删除套餐信息
+     * @Param: [ids]
+     * @return: void
+     */
     @Override
     public void deleteSetMeals(List<Long> ids) {
         //判断套餐是否起售中，起售中的套餐不能删除
@@ -119,5 +129,36 @@ public class SetMealServiceImpl implements SetMealService {
         //把菜品列表信息封装到SetMealVO对象中
         setMealVO.setSetmealDishes(setMealDishes);
         return setMealVO;
+    }
+
+    /**
+     * @Description: 修改套餐相关信息
+     * @Param: [setMealDTO]
+     * @return: void
+     */
+    @Override
+    public void updateSetMeal(SetMealDTO setMealDTO) {
+        //把前端传递的数据中的套餐基本数据复制到SetMeal对象中
+        SetMeal setMeal = new SetMeal();
+        BeanUtils.copyProperties(setMealDTO, setMeal);
+        //设置更新时间和更新人
+        setMeal.setUpdateTime(LocalDateTime.now());
+        setMeal.setUpdateUser(BaseContext.getCurrentId());
+        //修改套餐基本数据
+        setMealMapper.updateSetMeal(setMeal);
+
+        //获取套餐id
+        Long setMealId = setMealDTO.getId();
+        //获取套餐关联菜品
+        List<SetMealDish> setMealDishes = setMealDTO.getSetmealDishes();
+        //把餐关联菜品跟套餐id绑定
+        for (SetMealDish setMealDish : setMealDishes) {
+            setMealDish.setSetMealId(setMealId);
+        }
+
+        //删除套餐关联菜品信息
+        setMealDishMapper.deleteSetMealDishes(Arrays.asList(setMealId));
+        //把新的套餐关联菜品信息插入数据库
+        setMealDishMapper.addSetMealDish(setMealDishes);
     }
 }

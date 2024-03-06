@@ -82,4 +82,17 @@ public class SetMealController {
         return Result.success(setMealVO);
     }
 
+    /**
+     * @Description: 修改套餐相关信息
+     * @Param: [setMealDTO]
+     * @return: com.sky.result.Result
+     */
+    @PutMapping
+    @ApiOperation("修改套餐信息")
+    public Result updateSetMeal(@RequestBody SetMealDTO setMealDTO) {
+        log.info("修改套餐信息:{}", setMealDTO);
+        setMealService.updateSetMeal(setMealDTO);
+        return Result.success();
+    }
+
 }

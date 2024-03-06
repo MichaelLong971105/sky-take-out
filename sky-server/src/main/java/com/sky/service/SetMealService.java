@@ -41,4 +41,11 @@ public interface SetMealService {
      * @return: com.sky.vo.SetMealVO
      */
     SetMealVO getSetMealById(Long id);
+
+    /**
+     * @Description: 修改套餐相关信息
+     * @Param: [setMealDTO]
+     * @return: void
+     */
+    void updateSetMeal(SetMealDTO setMealDTO);
 }

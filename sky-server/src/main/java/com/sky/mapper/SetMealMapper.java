@@ -50,4 +50,11 @@ public interface SetMealMapper {
      * @return: void
      */
     void deleteSetMeals(List<Long> ids);
+
+    /**
+     * @Description: 修改套餐相关信息
+     * @Param: [setMeal]
+     * @return: void
+     */
+    void updateSetMeal(SetMeal setMeal);
 }
