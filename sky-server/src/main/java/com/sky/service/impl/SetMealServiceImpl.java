@@ -8,6 +8,7 @@ import com.sky.dto.SetMealPageQueryDTO;
 import com.sky.entity.SetMeal;
 import com.sky.entity.SetMealDish;
 import com.sky.exception.DeletionNotAllowedException;
+import com.sky.mapper.CategoryMapper;
 import com.sky.mapper.SetMealDishMapper;
 import com.sky.mapper.SetMealMapper;
 import com.sky.result.PageResult;
@@ -34,6 +35,9 @@ public class SetMealServiceImpl implements SetMealService {
 
     @Autowired
     private SetMealDishMapper setMealDishMapper;
+
+    @Autowired
+    private CategoryMapper categoryMapper;
 
     /**
      * @Description: 新增套餐信息
@@ -93,5 +97,27 @@ public class SetMealServiceImpl implements SetMealService {
 
         //删除套餐菜品表中对应的信息
         setMealDishMapper.deleteSetMealDishes(ids);
+    }
+
+    /**
+     * @Description: 根据id查询套餐信息
+     * @Param: [id]
+     * @return: com.sky.vo.SetMealVO
+     */
+    @Override
+    public SetMealVO getSetMealById(Long id) {
+        //查询套餐基本信息
+        SetMeal setMeal = setMealMapper.getSetMealById(id);
+
+        //把套餐基本信息及对应的分类名称封装到SetMealVO对象中
+        SetMealVO setMealVO = new SetMealVO();
+        BeanUtils.copyProperties(setMeal, setMealVO);
+
+        //根据套餐id查询包含的菜品的列表信息
+        List<SetMealDish> setMealDishes = setMealDishMapper.getSetMealDishBySetMealId(id);
+
+        //把菜品列表信息封装到SetMealVO对象中
+        setMealVO.setSetmealDishes(setMealDishes);
+        return setMealVO;
     }
 }

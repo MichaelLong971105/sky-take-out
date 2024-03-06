@@ -26,5 +26,7 @@
         </foreach>
     </delete>
 
-
+    <select id="getSetMealDishBySetMealId" resultType="com.sky.entity.SetMealDish">
+        select * from setmeal_dish where setmeal_id = #{id}
+    </select>
 </mapper>

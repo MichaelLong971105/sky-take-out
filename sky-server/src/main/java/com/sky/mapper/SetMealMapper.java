@@ -42,7 +42,6 @@ public interface SetMealMapper {
      * @Param: [id]
      * @return: com.sky.entity.SetMeal
      */
-    @Select("select * from setmeal where id = #{id}")
     SetMeal getSetMealById(Long id);
 
     /**

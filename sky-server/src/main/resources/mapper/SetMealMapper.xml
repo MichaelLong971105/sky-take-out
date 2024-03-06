@@ -3,8 +3,10 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.sky.mapper.SetMealMapper">
     <insert id="addSetMeal" useGeneratedKeys="true" keyProperty="id">
-        insert into setmeal (category_id, name, price, description, image, create_time, update_time, create_user, update_user)
-        VALUES (#{categoryId}, #{name}, #{price}, #{description}, #{image}, #{createTime}, #{updateTime}, #{createUser}, #{updateUser})
+        insert into setmeal (category_id, name, price, description, image, create_time, update_time, create_user,
+                             update_user)
+        VALUES (#{categoryId}, #{name}, #{price}, #{description}, #{image}, #{createTime}, #{updateTime}, #{createUser},
+                #{updateUser})
     </insert>
 
     <select id="pageSetMeal" resultType="com.sky.vo.SetMealVO">
@@ -21,6 +23,12 @@
             </if>
         </where>
         order by create_time desc
+    </select>
+
+    <select id="getSetMealById" resultType="com.sky.entity.SetMeal">
+        select *
+        from setmeal s
+        where id = #{id}
     </select>
 
     <delete id="deleteSetMeals">

@@ -35,4 +35,11 @@ public interface SetMealDishMapper {
      * @return: void
      */
     void deleteSetMealDishes(List<Long> setMealIds);
+
+    /**
+     * @Description: 根据套餐id查询套餐菜品信息
+     * @Param: [id]
+     * @return: java.util.List<com.sky.entity.SetMealDish>
+     */
+    List<SetMealDish> getSetMealDishBySetMealId(Long id);
 }
