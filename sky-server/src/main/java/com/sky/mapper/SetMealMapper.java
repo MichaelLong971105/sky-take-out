@@ -9,6 +9,8 @@ import com.sky.vo.SetMealVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 @Mapper
 public interface SetMealMapper {
 
@@ -34,4 +36,19 @@ public interface SetMealMapper {
      * @return: com.github.pagehelper.Page<com.sky.entity.SetMeal>
      */
     Page<SetMealVO> pageSetMeal(SetMealPageQueryDTO setMealPageQueryDTO);
+
+    /**
+     * @Description: 根据id查询套餐信息
+     * @Param: [id]
+     * @return: com.sky.entity.SetMeal
+     */
+    @Select("select * from setmeal where id = #{id}")
+    SetMeal getSetMealById(Long id);
+
+    /**
+     * @Description: 根据id删除套餐信息
+     * @Param: [ids]
+     * @return: void
+     */
+    void deleteSetMeals(List<Long> ids);
 }

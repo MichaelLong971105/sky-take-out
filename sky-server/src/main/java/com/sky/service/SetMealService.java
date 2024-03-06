@@ -4,6 +4,8 @@ import com.sky.dto.SetMealDTO;
 import com.sky.dto.SetMealPageQueryDTO;
 import com.sky.result.PageResult;
 
+import java.util.List;
+
 /**
  * @program: sky-take-out-backend
  * @description: 套餐管理相关功能Service
@@ -24,4 +26,11 @@ public interface SetMealService {
      * @return: com.sky.result.PageResult
      */
     PageResult pageSetMeal(SetMealPageQueryDTO setMealPageQueryDTO);
+
+    /**
+     * @Description: 批量删除套餐功能
+     * @Param: [ids]
+     * @return: void
+     */
+    void deleteSetMeals(List<Long> ids);
 }

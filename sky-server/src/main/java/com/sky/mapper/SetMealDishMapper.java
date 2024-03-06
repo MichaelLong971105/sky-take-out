@@ -22,5 +22,17 @@ public interface SetMealDishMapper {
      */
     List<Long> getSetMealIdsByDishIds(List<Long> dishIds);
 
+    /**
+     * @Description: 新增套餐菜品信息
+     * @Param: [setMealDishes]
+     * @return: void
+     */
     void addSetMealDish(List<SetMealDish> setMealDishes);
+
+    /**
+     * @Description: 根据套餐id删除套餐菜品信息
+     * @Param: [ids]
+     * @return: void
+     */
+    void deleteSetMealDishes(List<Long> setMealIds);
 }

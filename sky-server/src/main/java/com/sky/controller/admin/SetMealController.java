@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @program: sky-take-out-backend
  * @description: 套餐管理相关功能Controller
@@ -48,8 +50,22 @@ public class SetMealController {
     @GetMapping("/page")
     @ApiOperation("套餐分页查询功能")
     public Result<PageResult> pageSetMeal(SetMealPageQueryDTO setMealPageQueryDTO) {
+        log.info("分页查询套餐:{}", setMealPageQueryDTO);
         PageResult setMealPageResult = setMealService.pageSetMeal(setMealPageQueryDTO);
         return Result.success(setMealPageResult);
+    }
+
+    /**
+     * @Description: 批量删除套餐功能
+     * @Param: [ids]
+     * @return: com.sky.result.Result
+     */
+    @DeleteMapping
+    @ApiOperation("批量删除套餐")
+    public Result deleteSetMeals(@RequestParam List<Long> ids) {
+        log.info("批量删除套餐:{}", ids);
+        setMealService.deleteSetMeals(ids);
+        return Result.success();
     }
 
 }
