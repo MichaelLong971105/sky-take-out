@@ -6,7 +6,6 @@ import com.sky.dto.SetMealPageQueryDTO;
 import com.sky.entity.SetMeal;
 import com.sky.enumeration.OperationType;
 import com.sky.vo.SetMealVO;
-import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -21,7 +20,7 @@ public interface SetMealMapper {
     @Select("select count(id) from setmeal where category_id = #{categoryId}")
     Integer countByCategoryId(Long id);
 
-    /** 
+    /**
      * @Description: 新增套餐信息
      * @Param: [setMeal]
      * @return: void

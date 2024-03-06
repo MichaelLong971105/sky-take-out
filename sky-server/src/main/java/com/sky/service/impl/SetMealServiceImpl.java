@@ -4,14 +4,12 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.dto.SetMealDTO;
 import com.sky.dto.SetMealPageQueryDTO;
-import com.sky.entity.Employee;
 import com.sky.entity.SetMeal;
 import com.sky.entity.SetMealDish;
 import com.sky.mapper.SetMealDishMapper;
 import com.sky.mapper.SetMealMapper;
 import com.sky.result.PageResult;
 import com.sky.service.SetMealService;
-import com.sky.vo.DishVO;
 import com.sky.vo.SetMealVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,9 +47,14 @@ public class SetMealServiceImpl implements SetMealService {
 
         //把套餐的基本信息插入到数据库中
         setMealMapper.addSetMeal(setMeal);
+        Long setMealId = setMeal.getId();
 
         //获取套餐中关联的菜品信息
-        List<SetMealDish> setMealDishes = setMealDTO.getSetMealDishes();
+        List<SetMealDish> setMealDishes = setMealDTO.getSetmealDishes();
+        //把菜品跟套餐id绑定
+        for (SetMealDish setMealDish : setMealDishes) {
+            setMealDish.setSetMealId(setMealId);
+        }
         //把套餐中关联的菜品信息插入到数据库中
         setMealDishMapper.addSetMealDish(setMealDishes);
 
