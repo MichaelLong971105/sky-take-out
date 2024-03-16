@@ -74,4 +74,6 @@ public interface DishMapper {
      * @return: java.util.List<com.sky.entity.Dish>
      */
     List<Dish> getDishByCategoryId(Long categoryId);
+
+    List<Dish> list(Dish dish);
 }

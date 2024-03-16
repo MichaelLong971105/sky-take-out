@@ -2,7 +2,9 @@ package com.sky.service;
 
 import com.sky.dto.SetMealDTO;
 import com.sky.dto.SetMealPageQueryDTO;
+import com.sky.entity.SetMeal;
 import com.sky.result.PageResult;
+import com.sky.vo.DishItemVO;
 import com.sky.vo.SetMealVO;
 
 import java.util.List;
@@ -55,4 +57,18 @@ public interface SetMealService {
      * @return: void
      */
     void updateSetMealStatus(Long setMealId, Integer status);
+
+    /**
+     * 条件查询
+     * @param setmeal
+     * @return
+     */
+    List<SetMeal> list(SetMeal setmeal);
+
+    /**
+     * 根据id查询菜品选项
+     * @param id
+     * @return
+     */
+    List<DishItemVO> getDishItemById(Long id);
 }
