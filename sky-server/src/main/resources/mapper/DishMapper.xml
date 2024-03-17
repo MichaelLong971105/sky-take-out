@@ -40,7 +40,7 @@
                 name = #{name},
             </if>
             <if test="categoryId != null">
-                ncategory_id = #{categoryId},
+                category_id = #{categoryId},
             </if>
             <if test="price != null">
                 price = #{price},

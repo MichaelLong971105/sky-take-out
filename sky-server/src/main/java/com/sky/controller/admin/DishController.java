@@ -11,10 +11,12 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @program: sky-take-out-backend
@@ -32,6 +34,9 @@ public class DishController {
     @Autowired
     private DishService dishService;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     /**
      * @Description: 新增菜品
      * @Param: [dishDTO]
@@ -42,6 +47,11 @@ public class DishController {
     public Result addDish(@RequestBody DishDTO dishDTO) {
         log.info("新增菜品:{}", dishDTO);
         dishService.addDishWithFlavor(dishDTO);
+
+        //清理缓存数据
+        String key = "dishi_" + dishDTO.getCategoryId();
+        cleanCaches(key);
+
         return Result.success();
     }
 
@@ -68,6 +78,10 @@ public class DishController {
     public Result deleteDishes(@RequestParam List<Long> ids) {
         log.info("批量删除菜品:{}", ids);
         dishService.deleteDishes(ids);
+
+        //清理所有菜品的缓存数据(所有以dish_开头的key)
+        cleanCaches("dish_*");
+
         return Result.success();
     }
 
@@ -94,6 +108,10 @@ public class DishController {
     public Result updateDish(@RequestBody DishDTO dishDTO) {
         log.info("修改菜品信息:{}", dishDTO);
         dishService.updateDish(dishDTO);
+
+        //清理所有菜品的缓存数据(所有以dish_开头的key)
+        cleanCaches("dish_*");
+
         return Result.success();
     }
 
@@ -107,6 +125,10 @@ public class DishController {
     public Result updateDishStatus(@PathVariable Integer status, Long id) {
         log.info("修改菜品{}起售停售信息:{}", id, status);
         dishService.updateDishStatus(status, id);
+
+        //清理所有菜品的缓存数据(所有以dish_开头的key)
+        cleanCaches("dish_*");
+
         return Result.success();
     }
 
@@ -123,4 +145,14 @@ public class DishController {
         return Result.success(dishList);
     }
 
+    /**
+     * @Description: 清理缓存数据的方法
+     * @Param: [pattern]
+     * @return: void
+     */
+    private void cleanCaches(String pattern) {
+        //清理所有菜品的缓存数据(所有以dish_开头的key)
+        Set keys = redisTemplate.keys(pattern);
+        redisTemplate.delete(keys);
+    }
 }
