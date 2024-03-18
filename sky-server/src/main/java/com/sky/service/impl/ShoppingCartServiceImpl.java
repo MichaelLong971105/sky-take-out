@@ -80,4 +80,49 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         }
 
     }
+
+    /**
+     * @Description: 根据用户id查看所有购物车数据
+     * @Param: []
+     * @return: java.util.List<com.sky.entity.ShoppingCart>
+     */
+    @Override
+    public List<ShoppingCart> listAll() {
+        Long userId = BaseContext.getCurrentId();
+        ShoppingCart shoppingCart = ShoppingCart.builder()
+                .userId(userId)
+                .build();
+        List<ShoppingCart> shoppingCartList = shoppingCartMapper.list(shoppingCart);
+        return shoppingCartList;
+    }
+
+    /**
+     * @Description: 减少一个购物车中的商品
+     * @Param: [shoppingCartDTO]
+     * @return: void
+     */
+    @Override
+    public void sub(ShoppingCartDTO shoppingCartDTO) {
+        //先把这条数据找出来
+        ShoppingCart shoppingCart = new ShoppingCart();
+        BeanUtils.copyProperties(shoppingCartDTO, shoppingCart);
+        Long userId = BaseContext.getCurrentId();
+        shoppingCart.setUserId(userId);
+        List<ShoppingCart> shoppingCartList = shoppingCartMapper.list(shoppingCart);
+
+        ShoppingCart cart = shoppingCartList.get(0); //拿到这条数据
+        cart.setNumber(cart.getNumber() - 1); //数量-1
+        shoppingCartMapper.sub(cart); //更新数量
+    }
+
+    /**
+     * @Description: 清空购物车
+     * @Param: []
+     * @return: void
+     */
+    @Override
+    public void clean() {
+        Long userId = BaseContext.getCurrentId();
+        shoppingCartMapper.clean(userId);
+    }
 }
