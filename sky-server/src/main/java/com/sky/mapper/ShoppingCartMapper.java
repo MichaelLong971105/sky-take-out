@@ -1,0 +1,43 @@
+package com.sky.mapper;
+
+import com.sky.entity.ShoppingCart;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Update;
+
+import java.util.List;
+
+/**
+ * @program: sky-take-out-backend
+ * @description: 购物车相关Mapper
+ * @author: MichaelLong
+ * @create: 2024-03-18 23:02
+ **/
+
+@Mapper
+public interface ShoppingCartMapper {
+
+    /**
+     * @Description: 动态查询购物车中商品信息
+     * @Param: [shoppingCart]
+     * @return: java.util.List<com.sky.entity.ShoppingCart>
+     */
+    List<ShoppingCart> list(ShoppingCart shoppingCart);
+
+    /**
+     * @Description: 根据id更新购物车中的数据
+     * @Param: [shoppingCart]
+     * @return: void
+     */
+    @Update("update shopping_cart set number = #{number} where id = #{id}")
+    void updateNumberById(ShoppingCart shoppingCart);
+
+    /**
+     * @Description: 插入购物车数据
+     * @Param: [shoppingCart]
+     * @return: void
+     */
+    @Insert("insert into shopping_cart (name, image, user_id, dish_id, setmeal_id, dish_flavor, number, amount, create_time) " +
+            "VALUES (#{name}, #{image}, #{userId}, #{dishId}, #{setmealId}, #{dishFlavor}, #{number}, #{amount}, #{createTime})")
+    void insert(ShoppingCart shoppingCart);
+}
