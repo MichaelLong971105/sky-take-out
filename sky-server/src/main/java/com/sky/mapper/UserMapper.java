@@ -28,4 +28,12 @@ public interface UserMapper {
      * @return: void
      */
     void addUser(User user);
+
+    /**
+     * @Description: 根据id获取用户信息
+     * @Param: [userId]
+     * @return: com.sky.entity.User
+     */
+    @Select("select * from user where id = #{userId}")
+    User getById(Long userId);
 }
