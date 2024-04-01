@@ -19,4 +19,15 @@ public class OrderVO extends Orders implements Serializable {
     //订单详情
     private List<OrderDetail> orderDetailList;
 
+    public String getAllOrderDishes() {
+        StringBuilder allDishes = new StringBuilder();
+        for (OrderDetail orderDetail : this.orderDetailList) {
+            allDishes.append(orderDetail.getName() + "* " + orderDetail.getNumber() + "；");
+        }
+        return allDishes.toString();
+    }
+
+    public void autoSetOrderDishes() {
+        this.orderDishes = getAllOrderDishes();
+    }
 }
