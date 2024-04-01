@@ -5,9 +5,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
-import com.sky.dto.OrdersPageQueryDTO;
-import com.sky.dto.OrdersPaymentDTO;
-import com.sky.dto.OrdersSubmitDTO;
+import com.sky.dto.*;
 import com.sky.entity.*;
 import com.sky.exception.AddressBookBusinessException;
 import com.sky.exception.OrderBusinessException;
@@ -222,12 +220,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * @Description: 取消订单
+     * @Description: 用户取消订单
      * @Param: [id]
      * @return: void
      */
     @Override
-    public void cancelOrder(Long id) {
+    public void cancelOrderByUser(Long id) {
         Orders order = orderMapper.getOrderById(id);
         order.setStatus(Orders.CANCELLED);
         order.setCancelTime(LocalDateTime.now());
@@ -271,6 +269,11 @@ public class OrderServiceImpl implements OrderService {
     public PageResult orderSearch(OrdersPageQueryDTO ordersPageQueryDTO) {
         PageHelper.startPage(ordersPageQueryDTO.getPage(), ordersPageQueryDTO.getPageSize());
         Page<OrderVO> page = orderMapper.orderSearch(ordersPageQueryDTO);
+        for (OrderVO orderVO : page) {
+            List<OrderDetail> orderDetailList = orderDetailMapper.getByOrderId(orderVO.getId());
+            orderVO.setOrderDetailList(orderDetailList);
+            orderVO.autoSetOrderDishes();
+        }
         return new PageResult(page.getTotal(), page.getResult());
     }
 
@@ -285,11 +288,11 @@ public class OrderServiceImpl implements OrderService {
         OrderStatisticsVO orderStatisticsVO = new OrderStatisticsVO();
         int toBeConfirmed = 0, confirmed = 0, deliveryInProgress = 0;
         for (Orders orders : ordersList) {
-            if (orders.getStatus().equals(2)) {
+            if (orders.getStatus().equals(Orders.TO_BE_CONFIRMED)) {
                 toBeConfirmed++;
-            } else if (orders.getStatus().equals(3)) {
+            } else if (orders.getStatus().equals(Orders.CONFIRMED)) {
                 confirmed++;
-            } else if (orders.getStatus().equals(4)) {
+            } else if (orders.getStatus().equals(Orders.DELIVERY_IN_PROGRESS)) {
                 deliveryInProgress++;
             }
         }
@@ -297,5 +300,65 @@ public class OrderServiceImpl implements OrderService {
         orderStatisticsVO.setConfirmed(confirmed);
         orderStatisticsVO.setDeliveryInProgress(deliveryInProgress);
         return orderStatisticsVO;
+    }
+
+    @Override
+    public void confirmOrder(OrdersConfirmDTO ordersConfirmDTO) {
+        Orders order = orderMapper.getOrderById(ordersConfirmDTO.getId());
+        order.setStatus(Orders.CONFIRMED);
+        orderMapper.update(order);
+    }
+
+    /**
+     * @Description: 商家拒单
+     * @Param: [ordersRejectionDTO]
+     * @return: void
+     */
+    @Override
+    public void rejectOrder(OrdersRejectionDTO ordersRejectionDTO) {
+        Orders order = orderMapper.getOrderById(ordersRejectionDTO.getId());
+        order.setStatus(Orders.CANCELLED);
+        order.setCancelReason(ordersRejectionDTO.getRejectionReason());
+        order.setCancelTime(LocalDateTime.now());
+        orderMapper.update(order);
+    }
+
+    /**
+     * @Description: 商家取消订单
+     * @Param: [ordersCancelDTO]
+     * @return: void
+     */
+    @Override
+    public void cancelOrderByShop(OrdersCancelDTO ordersCancelDTO) {
+        Orders order = orderMapper.getOrderById(ordersCancelDTO.getId());
+        order.setStatus(Orders.CANCELLED);
+        order.setCancelTime(LocalDateTime.now());
+        order.setCancelReason(ordersCancelDTO.getCancelReason());
+        orderMapper.update(order);
+    }
+
+    /**
+     * @Description: 派送订单
+     * @Param: [id]
+     * @return: void
+     */
+    @Override
+    public void deliverOrder(Long id) {
+        Orders order = orderMapper.getOrderById(id);
+        order.setStatus(Orders.DELIVERY_IN_PROGRESS);
+        orderMapper.update(order);
+    }
+
+    /**
+     * @Description: 完成订单
+     * @Param: [id]
+     * @return: void
+     */
+    @Override
+    public void completeOrder(Long id) {
+        Orders order = orderMapper.getOrderById(id);
+        order.setStatus(Orders.COMPLETED);
+        order.setDeliveryTime(LocalDateTime.now());
+        orderMapper.update(order);
     }
 }

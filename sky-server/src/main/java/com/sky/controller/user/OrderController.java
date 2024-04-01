@@ -7,7 +7,6 @@ import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.OrderService;
 import com.sky.vo.OrderPaymentVO;
-import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
 import io.swagger.annotations.Api;
@@ -91,15 +90,15 @@ public class OrderController {
     }
 
     /**
-     * @Description: 根据id取消订单
+     * @Description: 用户取消订单
      * @Param: [id]
      * @return: com.sky.result.Result
      */
     @PutMapping("/cancel/{id}")
-    @ApiOperation("取消订单")
+    @ApiOperation("用户取消订单")
     public Result cancelOrder(@PathVariable Long id) {
-        log.info("取消订单:{}", id);
-        orderService.cancelOrder(id);
+        log.info("用户取消订单:{}", id);
+        orderService.cancelOrderByUser(id);
         return Result.success();
     }
 

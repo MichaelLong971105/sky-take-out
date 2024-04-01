@@ -1,6 +1,9 @@
 package com.sky.controller.admin;
 
+import com.sky.dto.OrdersCancelDTO;
+import com.sky.dto.OrdersConfirmDTO;
 import com.sky.dto.OrdersPageQueryDTO;
+import com.sky.dto.OrdersRejectionDTO;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.OrderService;
@@ -10,10 +13,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @program: sky-take-out-backend
@@ -65,8 +65,74 @@ public class OrderController {
     @GetMapping("/details/{id}")
     @ApiOperation("查看订单详情")
     public Result<OrderVO> getOrderDetail(@PathVariable Long id) {
+        log.info("查看订单详情{}", id);
         OrderVO orderVO = orderService.orderDetail(id);
         return Result.success(orderVO);
+    }
+
+    /**
+     * @Description: 商家接单
+     * @Param: []
+     * @return: com.sky.result.Result
+     */
+    @PutMapping("/confirm")
+    @ApiOperation("商家接单")
+    public Result confirmOrder(@RequestBody OrdersConfirmDTO ordersConfirmDTO) {
+        log.info("确认接单{}", ordersConfirmDTO.getId());
+        orderService.confirmOrder(ordersConfirmDTO);
+        return Result.success();
+    }
+
+    /**
+     * @Description: 商家拒单
+     * @Param: [ordersRejectionDTO]
+     * @return: com.sky.result.Result
+     */
+    @PutMapping("/rejection")
+    @ApiOperation("商家拒单")
+    public Result rejectOrder(@RequestBody OrdersRejectionDTO ordersRejectionDTO) {
+        log.info("商家拒单{}", ordersRejectionDTO.getId());
+        orderService.rejectOrder(ordersRejectionDTO);
+        return Result.success();
+    }
+
+    /**
+     * @Description: 商家取消订单
+     * @Param: [ordersCancelDTO]
+     * @return: com.sky.result.Result
+     */
+    @PutMapping("/cancel")
+    @ApiOperation("商家取消订单")
+    public Result cancelOrder(@RequestBody OrdersCancelDTO ordersCancelDTO) {
+        log.info("取消订单{}", ordersCancelDTO.getId());
+        orderService.cancelOrderByShop(ordersCancelDTO);
+        return Result.success();
+    }
+
+    /**
+     * @Description: 派送订单
+     * @Param: [id]
+     * @return: com.sky.result.Result
+     */
+    @PutMapping("delivery/{id}")
+    @ApiOperation("派送订单")
+    public Result deliverOrder(@PathVariable Long id) {
+        log.info("派送订单{}", id);
+        orderService.deliverOrder(id);
+        return Result.success();
+    }
+
+    /**
+     * @Description: 完成订单
+     * @Param: [id]
+     * @return: com.sky.result.Result
+     */
+    @PutMapping("/complete/{id}")
+    @ApiOperation("完成订单")
+    public Result completeOrder(@PathVariable Long id) {
+        log.info("完成订单{}", id);
+        orderService.completeOrder(id);
+        return Result.success();
     }
 
 }
