@@ -95,6 +95,7 @@ public class OrderServiceImpl implements OrderService {
         orders.setNumber(String.valueOf(System.currentTimeMillis()));
         orders.setPhone(addressBook.getPhone());
         orders.setConsignee(addressBook.getConsignee());
+        orders.setAddress(addressBook.getFullAddress());
         orders.setUserId(currentUserId);
 
         orderMapper.insert(orders);
@@ -256,5 +257,17 @@ public class OrderServiceImpl implements OrderService {
         }
 
         shoppingCartMapper.insertOldOrder(shoppingCartList);
+    }
+
+    /**
+     * @Description: 订单搜索
+     * @Param: [ordersPageQueryDTO]
+     * @return: com.sky.result.PageResult
+     */
+    @Override
+    public PageResult orderSearch(OrdersPageQueryDTO ordersPageQueryDTO) {
+        PageHelper.startPage(ordersPageQueryDTO.getPage(), ordersPageQueryDTO.getPageSize());
+        Page<OrderVO> page = orderMapper.orderSearch(ordersPageQueryDTO);
+        return new PageResult(page.getTotal(), page.getResult());
     }
 }

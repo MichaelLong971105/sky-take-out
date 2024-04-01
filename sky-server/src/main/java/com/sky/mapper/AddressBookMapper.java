@@ -53,4 +53,11 @@ public interface AddressBookMapper {
     @Delete("delete from address_book where id = #{id}")
     void deleteById(Long id);
 
+    /**
+     * @Description: 获取所有地址
+     * @Param: []
+     * @return: java.util.List<com.sky.entity.AddressBook>
+     */
+    @Select("select * from address_book")
+    List<AddressBook> getAll();
 }
