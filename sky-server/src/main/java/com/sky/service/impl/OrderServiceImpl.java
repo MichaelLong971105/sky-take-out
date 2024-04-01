@@ -18,6 +18,7 @@ import com.sky.service.OrderService;
 import com.sky.service.ShoppingCartService;
 import com.sky.utils.WeChatPayUtil;
 import com.sky.vo.OrderPaymentVO;
+import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
 import org.springframework.beans.BeanUtils;
@@ -229,6 +230,8 @@ public class OrderServiceImpl implements OrderService {
     public void cancelOrder(Long id) {
         Orders order = orderMapper.getOrderById(id);
         order.setStatus(Orders.CANCELLED);
+        order.setCancelTime(LocalDateTime.now());
+        order.setCancelReason("用户取消");
         orderMapper.update(order);
     }
 
@@ -269,5 +272,30 @@ public class OrderServiceImpl implements OrderService {
         PageHelper.startPage(ordersPageQueryDTO.getPage(), ordersPageQueryDTO.getPageSize());
         Page<OrderVO> page = orderMapper.orderSearch(ordersPageQueryDTO);
         return new PageResult(page.getTotal(), page.getResult());
+    }
+
+    /**
+     * @Description: 各个状态订单数量统计
+     * @Param: []
+     * @return: com.sky.vo.OrderStatisticsVO
+     */
+    @Override
+    public OrderStatisticsVO orderStatic() {
+        List<Orders> ordersList = orderMapper.getAllOrders();
+        OrderStatisticsVO orderStatisticsVO = new OrderStatisticsVO();
+        int toBeConfirmed = 0, confirmed = 0, deliveryInProgress = 0;
+        for (Orders orders : ordersList) {
+            if (orders.getStatus().equals(2)) {
+                toBeConfirmed++;
+            } else if (orders.getStatus().equals(3)) {
+                confirmed++;
+            } else if (orders.getStatus().equals(4)) {
+                deliveryInProgress++;
+            }
+        }
+        orderStatisticsVO.setToBeConfirmed(toBeConfirmed);
+        orderStatisticsVO.setConfirmed(confirmed);
+        orderStatisticsVO.setDeliveryInProgress(deliveryInProgress);
+        return orderStatisticsVO;
     }
 }
