@@ -111,4 +111,11 @@ public interface OrderService {
      * @return: void
      */
     void completeOrder(Long id);
+
+    /**
+     * @Description: 客户催单
+     * @Param: [id]
+     * @return: void
+     */
+    void reminder(Long id);
 }
