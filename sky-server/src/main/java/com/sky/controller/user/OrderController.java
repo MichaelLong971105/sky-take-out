@@ -115,4 +115,17 @@ public class OrderController {
         return Result.success();
     }
 
+    /**
+     * @Description: 客户催单
+     * @Param: [id]
+     * @return: com.sky.result.Result
+     */
+    @GetMapping("/reminder/{id}")
+    @ApiOperation("客户催单")
+    public Result reminder(@PathVariable Long id) {
+        log.info("客户催单:{}", id);
+        orderService.reminder(id);
+        return Result.success();
+    }
+
 }
