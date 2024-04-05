@@ -389,8 +389,6 @@ public class OrderServiceImpl implements OrderService {
         map.put("orderId", order.getId());
         map.put("content", "订单号:" + order.getNumber());
 
-        String json = JSON.toJSONString(map);
-
-        webSocketServer.sendToAllClient(json);
+        webSocketServer.sendToAllClient(JSON.toJSONString(map));
     }
 }
