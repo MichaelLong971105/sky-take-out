@@ -112,6 +112,9 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
         ShoppingCart cart = shoppingCartList.get(0); //拿到这条数据
         cart.setNumber(cart.getNumber() - 1); //数量-1
+        if (cart.getNumber() == 0) {
+            shoppingCartMapper.subToZero(cart);
+        }
         shoppingCartMapper.sub(cart); //更新数量
     }
 
