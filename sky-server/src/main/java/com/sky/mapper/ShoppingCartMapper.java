@@ -61,4 +61,11 @@ public interface ShoppingCartMapper {
      * @return: void
      */
     void insertOldOrder(List<ShoppingCart> shoppingCartList);
+
+    /**
+     * @Description: 当把某件商品数量减到0时删除该记录
+     * @Param: [cart]
+     * @return: void
+     */
+    void subToZero(ShoppingCart cart);
 }
