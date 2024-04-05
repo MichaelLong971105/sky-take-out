@@ -12,7 +12,7 @@ import java.util.Date;
  * @author: MichaelLong
  * @create: 2024-04-02 22:56
  **/
-@Component
+//@Component
 @Slf4j
 public class MyTask {
 
