@@ -78,5 +78,17 @@
         order by order_time desc
     </select>
 
+    <select id="getAmount" resultType="java.lang.Double">
+        select sum(amount) as amount
+        from orders
+        <where>
+            <if test="date != null">
+                and date_format(order_time, '%Y-%m-%d') = #{date}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
+    </select>
 
 </mapper>
