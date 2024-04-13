@@ -80,5 +80,10 @@ public interface OrderMapper {
     @Select("select * from orders where status = #{status} and order_time < #{orderTime}")
     List<Orders> getByStatusAndOrderTime(Integer status, LocalDateTime orderTime);
 
+    /**
+     * @Description: 获取指定状态的所有订单的总金额
+     * @Param: [date, status]
+     * @return: java.lang.Double
+     */
     Double getAmount(LocalDate date, Integer status);
 }
