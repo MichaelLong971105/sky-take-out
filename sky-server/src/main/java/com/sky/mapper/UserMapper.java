@@ -4,6 +4,9 @@ import com.sky.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 /**
  * @program: sky-take-out-backend
  * @description: 用户相关Mapper
@@ -36,4 +39,11 @@ public interface UserMapper {
      */
     @Select("select * from user where id = #{userId}")
     User getById(Long userId);
+
+    /**
+     * @Description: 获取指定时间新注册的用户数
+     * @Param: [date]
+     * @return: java.lang.Integer
+     */
+    Integer getUserAmount(LocalDateTime begin, LocalDateTime end);
 }
