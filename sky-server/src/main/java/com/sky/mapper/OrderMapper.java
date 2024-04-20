@@ -3,14 +3,16 @@ package com.sky.mapper;
 import com.github.pagehelper.Page;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.entity.Orders;
+import com.sky.entity.SalesTop10;
 import com.sky.vo.OrderVO;
-import io.swagger.models.auth.In;
+import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @program: sky-take-out-backend
@@ -86,4 +88,25 @@ public interface OrderMapper {
      * @return: java.lang.Double
      */
     Double getAmount(LocalDate date, Integer status);
+
+    /** 
+     * @Description: 获取指定时间区间内的订单数
+     * @Param: [date]
+     * @return: java.lang.Integer
+     */
+    Integer getOrdersNumberByDate(LocalDateTime begin, LocalDateTime end);
+
+    /**
+     * @Description: 获取指定时间区间内的有效订单数
+     * @Param: [date]
+     * @return: java.lang.Integer
+     */
+    Integer getValidOrdersByDate(LocalDateTime begin, LocalDateTime end);
+
+    /**
+     * @Description: 获取指定时间区间内的菜品销量前十数据
+     * @Param: [begin, end]
+     * @return: java.util.List<com.sky.entity.SalesTop10>
+     */
+    List<SalesTop10> getSalesStaticByDate(LocalDateTime begin, LocalDateTime end);
 }
