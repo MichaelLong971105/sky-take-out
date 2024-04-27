@@ -138,7 +138,7 @@ public class ReportServiceImpl implements ReportService {
             LocalDateTime endDateTime = LocalDateTime.of(date, LocalTime.MAX);
 
             //查询date对应的订单总数
-            Integer ordersAmount = orderMapper.getOrdersNumberByDate(beginDateTime, endDateTime);
+            Integer ordersAmount = orderMapper.getOrdersNumberByDate(beginDateTime, endDateTime, null);
             ordersAmount = ordersAmount == null ? 0 : ordersAmount;
             orderCountList.add(ordersAmount);
             totalOrderCount += ordersAmount;

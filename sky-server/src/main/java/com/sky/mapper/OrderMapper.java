@@ -90,11 +90,11 @@ public interface OrderMapper {
     Double getAmount(LocalDate date, Integer status);
 
     /** 
-     * @Description: 获取指定时间区间内的订单数
+     * @Description: 获取指定时间区间内的指定状态的订单数
      * @Param: [date]
      * @return: java.lang.Integer
      */
-    Integer getOrdersNumberByDate(LocalDateTime begin, LocalDateTime end);
+    Integer getOrdersNumberByDate(LocalDateTime begin, LocalDateTime end, Integer status);
 
     /**
      * @Description: 获取指定时间区间内的有效订单数
